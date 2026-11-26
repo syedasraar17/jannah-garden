@@ -1,4 +1,5 @@
-extends Node3D
+
+		extends Node3D
 ## Entry point: shows the character choice, builds the world, then runs the
 ## small animation driver for rides, flowing water and the cloth.
 
@@ -11,6 +12,7 @@ const CharacterBuilder = preload("res://character_builder.gd")
 const PlayerScript = preload("res://player.gd")
 const IshtihaScript = preload("res://ishtiha.gd")
 const TouchScript = preload("res://touch_controls.gd")
+const CompanionScript = preload("res://companion.gd")
 const P = preload("res://prims.gd")
 
 ## The hoor NPCs are OFF until a qualified scholar has reviewed whether and how
@@ -77,6 +79,13 @@ func _start(kind: String) -> void:
 	add_child(player)
 	player.setup(kind)
 	player.yaw = 0.0
+
+	# The other character walks after you.
+	var buddy := CharacterBody3D.new()
+	buddy.set_script(CompanionScript)
+	buddy.position = Core.SPAWN + Vector3(-2.5, 0, 3.0)
+	add_child(buddy)
+	buddy.setup("wife" if kind == "man" else "man", player)
 
 	var ui = CanvasLayer.new()
 	ui.set_script(IshtihaScript)
