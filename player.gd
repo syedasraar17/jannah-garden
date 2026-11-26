@@ -19,7 +19,6 @@ var horse: Node3D = null
 var model: Node3D
 var arm: SpringArm3D
 var cam: Camera3D
-var _walk_t := 0.0
 
 # Filled in by touch_controls.gd on phones.
 var touch_move := Vector2.ZERO   # x = right, y = forward (-1..1)
@@ -122,10 +121,10 @@ func _physics_process(delta: float) -> void:
 		model.rotation.y = lerp_angle(model.rotation.y, target, 10.0 * delta)
 
 	var lift := 1.1 if horse else 0.0
-	if moving and is_on_floor() and not horse:
-		_walk_t += delta * 9.0
-		lift += absf(sin(_walk_t)) * 0.05
 	model.position.y = lerpf(model.position.y, lift, 12.0 * delta)
+	# Arms, legs and clothes are animated by the character itself.
+	var ground_speed := Vector2(velocity.x, velocity.z).length()
+	model.call("update_motion", ground_speed if (is_on_floor() or horse != null) else 0.0, delta, horse != null)
 
 	if horse:
 		horse.global_position = global_position
