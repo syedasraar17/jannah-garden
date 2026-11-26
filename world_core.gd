@@ -1,3 +1,4 @@
+
 extends RefCounted
 ## Layout constants plus the base world: sky, soil, three rivers falling from
 ## distant waterfalls, and the bridges over them.
@@ -76,8 +77,8 @@ static func _environment(root: Node3D) -> void:
 	env.ambient_light_source = Environment.AMBIENT_SOURCE_SKY
 	env.ambient_light_energy = 1.1
 	env.tonemap_mode = Environment.TONE_MAPPER_FILMIC
-	env.glow_enabled = true
-	env.glow_intensity = 0.7
+	env.glow_enabled = not OS.has_feature("mobile")
+	env.glow_intensity = 0.35
 	env.fog_enabled = true
 	env.fog_light_color = Color(0.96, 0.93, 0.86)
 	env.fog_density = 0.0022
