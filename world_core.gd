@@ -60,37 +60,48 @@ static func build(root: Node3D) -> void:
 	_boundaries(root)
 
 
-# --- Sky and light: soft and constant, no harsh sun, no night -----------------
+# --- Sky and light: softer, less bright lighting ----------------------------
 
 static func _environment(root: Node3D) -> void:
 	var env := Environment.new()
 	env.background_mode = Environment.BG_SKY
+
 	var psm := ProceduralSkyMaterial.new()
-	psm.sky_top_color = Color(0.5, 0.74, 0.96)
-	psm.sky_horizon_color = Color(0.97, 0.94, 0.86)
-	psm.ground_horizon_color = Color(0.97, 0.94, 0.86)
-	psm.ground_bottom_color = Color(0.92, 0.9, 0.82)
+	psm.sky_top_color = Color(0.42, 0.62, 0.82)
+	psm.sky_horizon_color = Color(0.82, 0.82, 0.76)
+	psm.ground_horizon_color = Color(0.82, 0.82, 0.76)
+	psm.ground_bottom_color = Color(0.72, 0.70, 0.64)
 	psm.sun_angle_max = 0.0
+
 	var sky := Sky.new()
 	sky.sky_material = psm
 	env.sky = sky
+
+	# Lower ambient brightness.
 	env.ambient_light_source = Environment.AMBIENT_SOURCE_SKY
-	env.ambient_light_energy = 1.1
+	env.ambient_light_energy = 0.7
+
 	env.tonemap_mode = Environment.TONE_MAPPER_FILMIC
+
+	# Reduce glow.
 	env.glow_enabled = not OS.has_feature("mobile")
-	env.glow_intensity = 0.35
+	env.glow_intensity = 0.2
+
+	# Softer fog.
 	env.fog_enabled = true
-	env.fog_light_color = Color(0.96, 0.93, 0.86)
-	env.fog_density = 0.0022
+	env.fog_light_color = Color(0.82, 0.80, 0.74)
+	env.fog_density = 0.0018
+
 	var we := WorldEnvironment.new()
 	we.environment = env
 	root.add_child(we)
 
+	# Lower direct sunlight.
 	var sun := DirectionalLight3D.new()
 	sun.rotation_degrees = Vector3(-52, -30, 0)
 	sun.light_color = Color(1.0, 0.96, 0.88)
-	sun.light_energy = 1.0
-	sun.shadow_enabled = not OS.has_feature("mobile")   # shadows are too heavy for most phones
+	sun.light_energy = 0.7
+	sun.shadow_enabled = not OS.has_feature("mobile")
 	sun.directional_shadow_max_distance = 140.0
 	root.add_child(sun)
 
@@ -168,7 +179,7 @@ static func _ground(root: Node3D) -> void:
 	root.add_child(motes)
 
 
-# --- Rivers: water, milk and honey --------------------------------------------
+# --- Rivers: water, milk and honey ------------------------------------------
 
 static func _flow_mat(color: Color, speed: float, rough: float, uv_scale_y: float = 1.0) -> StandardMaterial3D:
 	var m := P.mat(Color(color.r * 1.8, color.g * 1.8, color.b * 1.8, color.a), rough, 0.2)
@@ -317,3 +328,6 @@ static func _boundaries(root: Node3D) -> void:
 	P.invisible_wall(root, Vector3(2, h, 260), Vector3(MAP_HALF_X + 1.0, h * 0.5, -11))
 	P.invisible_wall(root, Vector3(2, h, 260), Vector3(-MAP_HALF_X - 1.0, h * 0.5, -11))
 	P.invisible_wall(root, Vector3(2.0 * MAP_HALF_X + 4.0, h, 2), Vector3(0, h * 0.5, Z_SOUTH + 1.0))
+
+
+
