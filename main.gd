@@ -1,5 +1,4 @@
-
-		extends Node3D
+extends Node3D
 ## Entry point: shows the character choice, builds the world, then runs the
 ## small animation driver for rides, flowing water and the cloth.
 
@@ -148,3 +147,4 @@ func _process(delta: float) -> void:
 		var parent := c.get_parent() as Node3D
 		if parent:
 			c.rotation.z = -parent.rotation.z
+
