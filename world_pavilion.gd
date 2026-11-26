@@ -116,7 +116,7 @@ static func _roof(parent: Node3D, rng: RandomNumberGenerator) -> void:
 		# One bloom on top and one underneath, so the roof is full of flowers
 		# whether you look at it from outside or stand beneath it.
 		for r in [14.25, 13.7]:
-			var p := Vector3(0, ROOF_Y, 0) + dir * r
+			var p: Vector3 = Vector3(0, ROOF_Y, 0) + dir * r
 			xf.append(Transform3D(Basis.from_scale(Vector3(s, s * 0.7, s)), p))
 			cols.append(col)
 		n += 1
