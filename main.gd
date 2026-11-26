@@ -36,7 +36,7 @@ func _show_select() -> void:
 	_select_layer.add_child(bg)
 	var box := VBoxContainer.new()
 	box.set_anchors_and_offsets_preset(Control.PRESET_CENTER)
-	box.position = Vector2(440, 220)
+	box.position = Vector2(-175, -100)
 	box.add_theme_constant_override("separation", 18)
 	_select_layer.add_child(box)
 	var t := Label.new()
